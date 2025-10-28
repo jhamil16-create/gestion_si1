@@ -81,7 +81,7 @@
             alert('Por favor complete todos los campos obligatorios');
             return;
         }
-        
+        // hola xd
         // Como es solo frontend, redirigimos al listado
         window.location.href = '/docentes';
     });

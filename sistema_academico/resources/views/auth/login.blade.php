@@ -5,133 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FICCT - Sistema de Gestión Académica</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root {
-            --ficct-blue: #1a3e6f;
-            --ficct-blue-light: #2c5aa0;
+        :root{
+            --blue-primary: #1a3e6f;
+            --blue-hover: #2c5aa0;
+            --blue-active: #2563eb;
         }
-        .bg-ficct-blue {
-            background-color: var(--ficct-blue);
-        }
-        .bg-ficct-blue-light {
-            background-color: var(--ficct-blue-light);
-        }
-        .text-ficct-blue {
-            color: var(--ficct-blue);
-        }
-        .border-ficct-blue {
-            border-color: var(--ficct-blue);
-        }
-        .login-bg {
-            background-image: url('/img/background.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        .bg-gradient-ficct {
-            background: linear-gradient(135deg, var(--ficct-blue) 0%, var(--ficct-blue-light) 100%);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out;
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <div class="min-h-screen flex flex-col lg:flex-row">
-        <!-- Columna Izquierda - Background -->
-        <div class="hidden lg:flex lg:w-3/5 login-bg relative">
-            <div class="absolute inset-0 bg-gradient-ficct opacity-90"></div>
-            <div class="relative z-10 flex flex-col justify-center items-center w-full text-white p-12 animate-fadeIn">
-                <img src="/img/logoFicct.png" class="w-48 h-48 mb-8" alt="FICCT">
-                <h1 class="text-5xl font-bold mb-4 text-center">Sistema FICCT</h1>
-                <p class="text-2xl font-light mb-2">Gestión Académica Integral</p>
-                <div class="w-16 h-1 bg-white rounded-full mb-6"></div>
-                <p class="text-lg text-center text-blue-100 max-w-xl">
-                    Plataforma integral para la gestión de horarios, aulas, materias y control de asistencia docente
+<body class="h-full">
+    <div class="flex h-screen w-screen">
+        <!-- Columna Izquierda (50%) -->
+        <div class="hidden md:flex md:w-1/2 relative">
+            <!-- Fondo con imagen -->
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/img/backgroundHomePage.jpg');"></div>
+            <!-- Overlay azul -->
+            <div class="absolute inset-0 bg-blue-900/40"></div>
+            <!-- Contenido -->
+            <div class="relative z-10 flex flex-col items-center justify-center w-full text-white p-8">
+                <img src="/img/logoFicct.png" alt="FICCT" class="w-48 h-48 mb-6">
+                <h1 class="text-4xl font-bold text-center">Sistema FICCT</h1>
+                <p class="text-xl mt-2">Gestión Académica</p>
+                <div class="w-16 h-1 bg-white rounded-full my-6"></div>
+                <p class="text-center text-blue-100 max-w-md">
+                    Plataforma integral para la gestión de horarios, aulas y materias en la Facultad de Ingeniería en Ciencias de la Computación.
                 </p>
             </div>
         </div>
 
-        <!-- Columna Derecha - Formulario -->
-        <div class="w-full lg:w-2/5 flex items-center justify-center p-8 bg-gray-50">
+        <!-- Columna Derecha (50%) - Formulario -->
+        <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-gray-50">
             <div class="w-full max-w-md">
-                <!-- Logo para móvil -->
-                <div class="lg:hidden flex flex-col items-center mb-8">
-                    <img src="/img/logoFicct.png" class="w-24 h-24 mb-4" alt="FICCT">
-                    <h1 class="text-2xl font-bold text-gray-900">Sistema FICCT</h1>
+                <!-- Logo móvil -->
+                <div class="md:hidden text-center mb-8">
+                    <img src="/img/logoFicct.png" alt="FICCT" class="w-24 h-24 mx-auto mb-4">
+                    <h1 class="text-2xl font-bold text-gray-800">Sistema FICCT</h1>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
+                <!-- Card del formulario -->
+                <div class="bg-white/95 backdrop-blur-sm shadow-2xl rounded-xl p-8">
                     <div class="text-center mb-8">
                         <h2 class="text-3xl font-bold text-gray-800">Iniciar Sesión</h2>
-                        <p class="text-gray-600 mt-2">Ingresa a tu cuenta</p>
+                        <p class="text-gray-600 mt-2">Accede a tu cuenta</p>
                     </div>
 
                     <form id="loginForm" class="space-y-6">
-                        <div class="space-y-4">
-                            <div>
-                                <label for="registro" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Número de Registro
-                                </label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                    </span>
-                                    <input id="registro" name="registro" type="text" required 
-                                        class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                        placeholder="218100001">
+                        <!-- Campo Registro -->
+                        <div class="space-y-2">
+                            <label for="registro" class="block text-sm font-medium text-gray-700">
+                                Número de Registro
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
                                 </div>
-                            </div>
-
-                            <div>
-                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Contraseña
-                                </label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                        </svg>
-                                    </span>
-                                    <input id="password" name="password" type="password" required 
-                                        class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                        placeholder="••••••••">
-                                    <button type="button" onclick="togglePassword()" 
-                                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                    </button>
-                                </div>
+                                <input id="registro" name="registro" type="text" required 
+                                    class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--blue-primary)] focus:border-transparent"
+                                    placeholder="218100001">
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center">
-                                <input id="remember-me" name="remember-me" type="checkbox" 
-                                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                                <span class="ml-2 text-sm text-gray-600">Recordar sesión</span>
+                        <!-- Campo Contraseña -->
+                        <div class="space-y-2">
+                            <label for="password" class="block text-sm font-medium text-gray-700">
+                                Contraseña
                             </label>
-                            <a href="#" class="text-sm text-blue-600 hover:text-blue-500 font-medium">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input id="password" name="password" type="password" required 
+                                    class="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--blue-primary)] focus:border-transparent"
+                                    placeholder="••••••••">
+                                <button type="button" onclick="togglePassword()" 
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recordar sesión y Olvidé contraseña -->
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center space-x-2 text-sm">
+                                <input type="checkbox" id="remember-me" name="remember-me" 
+                                    class="w-4 h-4 text-[var(--blue-primary)] border-gray-300 rounded focus:ring-[var(--blue-primary)]">
+                                <span class="text-gray-700">Recordar sesión</span>
+                            </label>
+                            <a href="#" class="text-sm text-[var(--blue-primary)] hover:text-[var(--blue-hover)] transition-colors">
                                 ¿Olvidaste tu contraseña?
                             </a>
                         </div>
 
+                        <!-- Botón Submit -->
                         <button type="submit" 
-                            class="w-full bg-gradient-ficct text-white py-3 px-4 rounded-lg font-semibold transform transition-all duration-200 hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Iniciar Sesión
+                            class="w-full bg-[var(--blue-primary)] hover:bg-[var(--blue-hover)] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <span>Iniciar Sesión</span>
+                            <i class="fas fa-arrow-right"></i>
                         </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Mostrar/ocultar contraseña
+        function togglePassword(){
+            const p = document.getElementById('password');
+            p.type = p.type === 'password' ? 'text' : 'password';
+        }
+
+        // Login simple (mantener usuarios ya definidos en la app o reutilizar los existentes)
+        const usuariosValidos = [
+            { email: 'jvelizloayza@gmail.com', registro: '218100001', password: 'password', rol: 'admin', nombre: 'Administrador Principal' },
+            { email: 'docente123@ficct.edu', registro: '218100002', password: 'docente123', rol: 'docente', nombre: 'Profesor Ejemplo' }
+        ];
+
+        document.getElementById('loginForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const registro = document.getElementById('registro').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const recordar = document.getElementById('remember-me').checked;
+
+            const usuario = usuariosValidos.find(u => u.registro === registro && u.password === password);
+            if(usuario){
+                const sessionData = { email: usuario.email, registro: usuario.registro, rol: usuario.rol, nombre: usuario.nombre, loggedIn: true };
+                if(recordar) localStorage.setItem('usuario', JSON.stringify(sessionData)); else sessionStorage.setItem('usuario', JSON.stringify(sessionData));
+                window.location.href = '/dashboard';
+            } else {
+                alert('Credenciales incorrectas');
+            }
+        });
+    </script>
+</body>
+</html>
 
     <script>
         // Usuarios válidos

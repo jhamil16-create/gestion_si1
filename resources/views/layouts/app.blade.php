@@ -30,7 +30,6 @@
   >
     <!-- Header del sidebar -->
     <div class="h-16 flex items-center justify-between px-3 border-b border-blue-800">
-      <!-- Marca -->
       <div class="flex items-center gap-3 min-w-0">
         <i class="fa-solid fa-graduation-cap text-xl shrink-0"></i>
         <div class="transition-opacity duration-200 whitespace-nowrap overflow-hidden"
@@ -44,8 +43,7 @@
       <button
         class="hidden lg:inline-flex items-center justify-center size-8 rounded-md hover:bg-blue-800/40"
         @click="toggleCollapse()"
-        :title="collapsed ? 'Expandir' : 'Colapsar'"
-      >
+        :title="collapsed ? 'Expandir' : 'Colapsar'">
         <i class="fa-solid" :class="collapsed ? 'fa-angles-right' : 'fa-angles-left'"></i>
       </button>
 
@@ -53,21 +51,18 @@
       <button
         class="lg:hidden inline-flex items-center justify-center size-8 rounded-md hover:bg-blue-800/40"
         @click="sidebarOpen=false"
-        title="Cerrar"
-      >
+        title="Cerrar">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
 
     <!-- NAV -->
     <nav class="mt-3 px-2 overflow-y-auto custom-scrollbar" :style="`height: calc(100vh - 4rem);`">
-      <!-- helper: item de menú -->
       <template x-for="item in menu" :key="item.href">
         <a :href="item.href"
            class="group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--blue-hover)] transition-colors"
            :class="isActive(item) ? 'bg-[var(--blue-active)]' : ''"
-           :title="collapsed ? item.text : null"
-        >
+           :title="collapsed ? item.text : null">
           <i :class="`w-5 text-center ${item.icon}`"></i>
           <span class="transition-all duration-200"
                 :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">
@@ -134,36 +129,36 @@
   <script>
     function layoutApp(){
       return {
-        // estado
-        sidebarOpen: false,    // visible en móvil
-        collapsed: false,      // colapsado en desktop (solo íconos)
+        sidebarOpen: false,
+        collapsed: false,
         route: window.location.pathname,
 
-        // menú (ajusta tus rutas Laravel)
+        // menú dinámico según el tipo de usuario
         menu: [
-          { text:'Inicio',            href:"{{ route('home') }}",               icon:'fas fa-home',                 match:['/','/home'] },
-          { text:'Bitácora',          href:"{{ route('bitacoras.index') }}",    icon:'fas fa-history',              match:['/bitacoras'] },
-          { text:'Materias',          href:"{{ route('materias.index') }}",     icon:'fas fa-book',                 match:['/materias'] },
-          { text:'Docentes',          href:"{{ route('docentes.index') }}",     icon:'fas fa-chalkboard-teacher',   match:['/docentes'] },
-          { text:'Administradores',   href:"{{ route('administradores.index') }}", icon:'fas fa-user-shield',     match:['/administradores'] },
-          { text:'Gestiones',         href:"{{ route('gestiones.index') }}",    icon:'fas fa-calendar-alt',         match:['/gestiones'] },
-          { text:'Aulas',             href:"{{ route('aulas.index') }}",        icon:'fas fa-door-open',            match:['/aulas'] },
-          { text:'Grupos',            href:"{{ route('grupos.index') }}",       icon:'fas fa-users',                match:['/grupos'] },
+          @if (auth()->user()->docente)
+            // 👇 Si es DOCENTE: solo Materias y Grupos
+            { text:'Materias', href:"{{ route('materias.index') }}", icon:'fas fa-book', match:['/materias'] },
+            { text:'Grupos', href:"{{ route('grupos.index') }}", icon:'fas fa-users', match:['/grupos'] },
+          @else
+            // 👇 Si NO es docente: menú completo
+            { text:'Inicio', href:"{{ route('home') }}", icon:'fas fa-home', match:['/','/home'] },
+            { text:'Bitácora', href:"{{ route('bitacoras.index') }}", icon:'fas fa-history', match:['/bitacoras'] },
+            { text:'Materias', href:"{{ route('materias.index') }}", icon:'fas fa-book', match:['/materias'] },
+            { text:'Docentes', href:"{{ route('docentes.index') }}", icon:'fas fa-chalkboard-teacher', match:['/docentes'] },
+            { text:'Administradores', href:"{{ route('administradores.index') }}", icon:'fas fa-user-shield', match:['/administradores'] },
+            { text:'Gestiones', href:"{{ route('gestiones.index') }}", icon:'fas fa-calendar-alt', match:['/gestiones'] },
+            { text:'Aulas', href:"{{ route('aulas.index') }}", icon:'fas fa-door-open', match:['/aulas'] },
+            { text:'Grupos', href:"{{ route('grupos.index') }}", icon:'fas fa-users', match:['/grupos'] },
+          @endif
         ],
 
-        // init
         init(){
-          // recuperar preferencias
           this.collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-          // en móvil, el sidebar inicia cerrado; en desktop queda a criterio del colapso (si está colapsado, no necesita overlay)
           this.sidebarOpen = false;
-
-          // re-cálculo de layout al redimensionar
           window.addEventListener('resize', () => { this.$nextTick(() => {}); });
         },
 
-        // helpers
-        isMobile(){ return window.innerWidth < 1024; }, // < lg
+        isMobile(){ return window.innerWidth < 1024; },
 
         toggleCollapse(){
           this.collapsed = !this.collapsed;
@@ -175,17 +170,13 @@
           return item.match.some(m => p === m || p.startsWith(m));
         },
 
-        // estilos calculados
         get sidebarWidth(){
-          // móvil: ancho fijo cuando está abierto (64 = 16rem), cerrado: 0
           if (this.isMobile()) return this.sidebarOpen ? 256 : 0;
-          // desktop: expandido 256px, colapsado 80px (w-20)
           return this.collapsed ? 80 : 256;
         },
 
         get sidebarStyle(){
           const w = this.sidebarWidth;
-          // en móvil, el sidebar entra/sale por la izquierda
           const trans = this.isMobile()
             ? `translateX(${this.sidebarOpen ? '0' : '-100%'})`
             : 'translateX(0)';
@@ -193,7 +184,6 @@
         },
 
         get contentStyle(){
-          // margen izquierdo = ancho del sidebar solo en desktop
           const ml = this.isMobile() ? 0 : this.sidebarWidth;
           return `margin-left:${ml}px;`;
         },

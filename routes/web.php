@@ -40,7 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('docentes', DocenteController::class);
 
     // Administradores
-    Route::resource('administradores', AdministradorController::class);
+    Route::resource('administradores', AdministradorController::class)
+    ->parameters(['administradores' => 'administrador']);
 
     // Gestiones Académicas
     Route::resource('gestiones', GestionAcademicaController::class)->names([

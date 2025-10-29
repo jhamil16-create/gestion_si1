@@ -1,9 +1,12 @@
 @extends('layouts.app')
 @section('title', 'Detalle de Docente')
+
 @section('content')
 <div class="max-w-4xl mx-auto bg-white rounded shadow p-6">
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">Docente: {{ $docente->usuario->nombre }}</h2>
+        <h2 class="text-2xl font-bold">
+            Docente: {{ $docente->usuario->nombre ?? '—' }}
+        </h2>
         <div class="space-x-2">
             <a href="{{ route('docentes.edit', $docente->id_docente) }}" 
                class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
@@ -16,25 +19,25 @@
         </div>
     </div>
 
-    <!-- Información del Docente -->
+    {{-- Información del Docente --}}
     <div class="bg-gray-50 rounded p-4 mb-6">
         <h3 class="text-lg font-semibold mb-3">Información Personal</h3>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <p class="text-gray-600 text-sm">ID Docente</p>
                 <p class="font-semibold">{{ $docente->id_docente }}</p>
             </div>
             <div>
                 <p class="text-gray-600 text-sm">ID Usuario</p>
-                <p class="font-semibold">{{ $docente->usuario->id_usuario }}</p>
+                <p class="font-semibold">{{ $docente->usuario->id_usuario ?? '—' }}</p>
             </div>
             <div>
                 <p class="text-gray-600 text-sm">Nombre Completo</p>
-                <p class="font-semibold">{{ $docente->usuario->nombre }}</p>
+                <p class="font-semibold">{{ $docente->usuario->nombre ?? '—' }}</p>
             </div>
             <div>
                 <p class="text-gray-600 text-sm">Email</p>
-                <p class="font-semibold">{{ $docente->usuario->email }}</p>
+                <p class="font-semibold">{{ $docente->usuario->email ?? '—' }}</p>
             </div>
             <div>
                 <p class="text-gray-600 text-sm">Teléfono</p>
@@ -42,38 +45,45 @@
             </div>
             <div>
                 <p class="text-gray-600 text-sm">Fecha de Registro</p>
-                <p class="font-semibold">{{ $docente->created_at->format('d/m/Y') }}</p>
+                {{-- Docente no tiene timestamps; usamos el del Usuario si existe --}}
+                <p class="font-semibold">
+                    {{ optional($docente->usuario->created_at)->format('d/m/Y') ?? '—' }}
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- Grupos que imparte -->
+    {{-- Grupos que imparte --}}
     @if($docente->grupos && $docente->grupos->count() > 0)
         <div class="mt-6">
             <h3 class="text-lg font-semibold mb-3">Grupos que Imparte</h3>
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border px-4 py-2 text-left">Nombre Grupo</th>
-                            <th class="border px-4 py-2 text-left">Materia</th>
-                            <th class="border px-4 py-2 text-left">Capacidad</th>
-                            <th class="border px-4 py-2 text-left">Gestión</th>
+                        <tr class="bg-gray-100 text-left">
+                            <th class="border px-4 py-2">Nombre Grupo</th>
+                            <th class="border px-4 py-2">Materia</th>
+                            <th class="border px-4 py-2">Capacidad</th>
+                            <th class="border px-4 py-2">Gestión</th>
                             <th class="border px-4 py-2 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($docente->grupos as $grupo)
                             <tr class="hover:bg-gray-50">
-                                <td class="border px-4 py-2">{{ $grupo->nombre }}</td>
+                                <td class="border px-4 py-2">{{ $grupo->nombre ?? '—' }}</td>
                                 <td class="border px-4 py-2">
-                                    {{ $grupo->materia->nombre ?? 'N/A' }}
-                                    <span class="text-gray-500 text-sm">({{ $grupo->sigla }})</span>
+                                    {{ optional($grupo->materia)->nombre ?? 'N/A' }}
+                                    @if(!empty($grupo->sigla))
+                                        <span class="text-gray-500 text-sm">({{ $grupo->sigla }})</span>
+                                    @endif
                                 </td>
-                                <td class="border px-4 py-2">{{ $grupo->capacidad }} estudiantes</td>
                                 <td class="border px-4 py-2">
-                                    {{ $grupo->gestionAcademica->ano ?? 'N/A' }} - 
-                                    {{ $grupo->gestionAcademica->semestre ?? 'N/A' }}
+                                    {{ $grupo->capacidad ?? 0 }} estudiantes
+                                </td>
+                                <td class="border px-4 py-2">
+                                    {{ optional($grupo->gestionAcademica)->ano ?? 'N/A' }} -
+                                    {{ optional($grupo->gestionAcademica)->semestre ?? 'N/A' }}
                                 </td>
                                 <td class="border px-4 py-2 text-center">
                                     <a href="{{ route('grupos.show', $grupo->id_grupo) }}" 
@@ -93,7 +103,7 @@
         </div>
     @endif
 
-    <!-- Botón de Eliminar -->
+    {{-- Botón de Eliminar --}}
     <div class="mt-6 pt-6 border-t">
         <form action="{{ route('docentes.destroy', $docente->id_docente) }}" 
               method="POST" 

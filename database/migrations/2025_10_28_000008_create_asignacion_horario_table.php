@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreign('id_aula')->references('id_aula')->on('aula');
 
             // Llave foránea para 'grupo'
-            $table->unsignedBigInteger('id_grupo');
-            $table->foreign('id_grupo')->references('id_grupo')->on('grupo');
+            $table->string('id_grupo', 100); 
+            $table->foreign('id_grupo')->references('id_grupo')->on('grupo'); 
         });
     }
 

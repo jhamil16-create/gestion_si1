@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aula;
-use App\Models\Bitacora; // ← Añadido
+use App\Models\Bitacora;
 use Illuminate\Http\Request;
 
 class AulaController extends Controller
@@ -21,20 +21,27 @@ class AulaController extends Controller
 
     public function store(Request $request)
     {
+        // 'capacidad' ELIMINADO DE LA VALIDACIÓN
         $request->validate([
-            'capacidad' => 'required|integer|min:1',
+            'id_aula' => 'required|numeric|unique:aula,id_aula',
             'tipo' => 'required|string|max:30',
         ]);
 
         $aula = Aula::create($request->all());
 
+        // 'capacidad' ELIMINADO DE LA BITÁCORA
         Bitacora::create([
             'id_usuario' => auth()->id(),
             'ip_origen' => $request->ip(),
-            'descripcion' => "Creó el aula de tipo '{$aula->tipo}' con capacidad para {$aula->capacidad} personas",
+            'descripcion' => "Creó el aula ID '{$aula->id_aula}' (Tipo: {$aula->tipo})",
         ]);
 
-        return redirect()->route('aulas.index')->with('success', 'Aula creada.');
+        return redirect()->route('aulas.index')->with('success', 'Aula creada exitosamente.');
+    }
+
+    public function show(Aula $aula)
+    {
+        return view('aulas.show', compact('aula'));
     }
 
     public function edit(Aula $aula)
@@ -44,38 +51,41 @@ class AulaController extends Controller
 
     public function update(Request $request, Aula $aula)
     {
+        // 'capacidad' ELIMINADO DE LA VALIDACIÓN
         $request->validate([
-            'capacidad' => 'required|integer|min:1',
             'tipo' => 'required|string|max:30',
         ]);
 
         $oldTipo = $aula->tipo;
-        $oldCapacidad = $aula->capacidad;
 
-        $aula->update($request->all());
+        // 'capacidad' ELIMINADO DEL UPDATE
+        $aula->update($request->only('tipo'));
 
+        // 'capacidad' ELIMINADO DE LA BITÁCORA
         Bitacora::create([
             'id_usuario' => auth()->id(),
             'ip_origen' => $request->ip(),
-            'descripcion' => "Actualizó el aula de tipo '{$oldTipo}' (capacidad: {$oldCapacidad}) a tipo '{$aula->tipo}' (capacidad: {$aula->capacidad})",
+            'descripcion' => "Actualizó el aula ID '{$aula->id_aula}' (Tipo: {$oldTipo} -> {$aula->tipo})",
         ]);
 
-        return redirect()->route('aulas.index')->with('success', 'Aula actualizada.');
+        return redirect()->route('aulas.index')->with('success', 'Aula actualizada exitosamente.');
     }
 
     public function destroy(Aula $aula)
     {
         try {
+            // 'capacidad' ELIMINADO DE LA BITÁCORA
             Bitacora::create([
                 'id_usuario' => auth()->id(),
                 'ip_origen' => request()->ip(),
-                'descripcion' => "Eliminó el aula de tipo '{$aula->tipo}' con capacidad {$aula->capacidad}",
+                'descripcion' => "Eliminó el aula ID '{$aula->id_aula}' (Tipo: {$aula->tipo})",
             ]);
 
             $aula->delete();
-            return redirect()->route('aulas.index')->with('success', 'Aula eliminada.');
+            return redirect()->route('aulas.index')->with('success', 'Aula eliminada exitosamente.');
         } catch (\Illuminate\Database\QueryException $e) {
             return back()->with('error', 'No se puede eliminar, esta aula está en uso.');
         }
     }
 }
+

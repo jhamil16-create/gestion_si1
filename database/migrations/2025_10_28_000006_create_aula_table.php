@@ -8,10 +8,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('aula', function (Blueprint $table) {
-            $table->id('id_aula'); // id_aula serial
-            $table->smallInteger('capacidad');
+            
+            $table->bigInteger('id_aula');
+            $table->primary('id_aula');
             $table->string('tipo', 30);
-            // $table->timestamps(); sin timestamps
         });
     }
 
@@ -20,3 +20,4 @@ return new class extends Migration
         Schema::dropIfExists('aula');
     }
 };
+

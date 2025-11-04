@@ -12,9 +12,13 @@ class Aula extends Model
     protected $table = 'aula';
     protected $primaryKey = 'id_aula';
     public $timestamps = false;
+    public $incrementing = false; 
 
+    /**
+     * 👇 'capacidad' HA SIDO ELIMINADO DE AQUÍ 👇
+     */
     protected $fillable = [
-        'capacidad',
+        'id_aula',
         'tipo',
     ];
 
@@ -26,3 +30,4 @@ class Aula extends Model
         return $this->hasMany(AsignacionHorario::class, 'id_aula', 'id_aula');
     }
 }
+

@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Providers;
-
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Http\Request; // <-- ¡Esta línea es importante!
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL; 
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // BORRA LA LÍNEA QUE DABA ERROR Y PON ESTAS:
+        // 1. Configurar los proxies de confianza para que Laravel sepa que es seguro
         Request::setTrustedProxies(
             ['*'],
             Request::HEADER_X_FORWARDED_FOR |
@@ -28,5 +27,9 @@ class AppServiceProvider extends ServiceProvider
             Request::HEADER_X_FORWARDED_PORT |
             Request::HEADER_X_FORWARDED_PROTO
         );
+        
+        if (config('app.env') === 'local' && config('app.url')) {
+            URL::forceScheme('https');
+        }
     }
 }

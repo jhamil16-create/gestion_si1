@@ -13,27 +13,27 @@ class Docente extends Model
     protected $primaryKey = 'id_docente';
     public $timestamps = false;
 
-    /**
-     * Atributos que se pueden asignar masivamente.
-     */
     protected $fillable = [
         'id_usuario',
-        // Aquí irían otros campos específicos de docente si los tuviera
     ];
 
-    /**
-     * Obtiene el 'usuario' base al que pertenece este docente.
-     */
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario', 'id_usuario');
     }
 
     /**
-     * Obtiene los grupos asignados a este docente.
+     * CORRECCIÓN:
+     * Un docente ahora puede pertenecer a MUCHOS grupos
+     * a través de la tabla 'docente_grupo'.
      */
     public function grupos()
     {
-        return $this->hasMany(Grupo::class, 'id_docente', 'id_docente');
+        return $this->belongsToMany(
+            Grupo::class,       // Modelo con el que se relaciona
+            'docente_grupo',    // Nombre de la tabla pivote
+            'id_docente',       // Llave foránea de Docente (este modelo)
+            'id_grupo'          // Llave foránea de Grupo (el otro modelo)
+        );
     }
 }

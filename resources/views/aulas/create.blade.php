@@ -2,22 +2,14 @@
 @section('title', 'Nueva Aula')
 
 @section('content')
-{{-- Se ha ajustado el padding para móviles (p-6) y se mantiene (p-8) para pantallas sm y superiores --}}
 <div class="max-w-xl mx-auto bg-white rounded-lg shadow-xl p-6 sm:p-8">
 
-    {{-- MENSAJE DE ERROR DE VALIDACIÓN MEJORADO --}}
-    @if($errors->any())
-        <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-md">
-            {{-- ... (contenido sin cambios) ... --}}
-        </div>
-    @endif
+    {{-- INICIO CORRECCIÓN:
+         Se quitan los bloques @if($errors->any()) y @if(session('error'))
+         para evitar los mensajes duplicados que viste en tus imágenes.
+         Tu 'layouts.app' se debe encargar de mostrar estos mensajes.
+    --}}
     
-    @if(session('error'))
-        <div class="mb-4 p-4 flex items-center bg-red-50 border-l-4 border-red-500 rounded-lg shadow-md">
-            {{-- ... (contenido sin cambios) ... --}}
-        </div>
-    @endif
-
     <form action="{{ route('aulas.store') }}" method="POST" class="space-y-6">
         @csrf
 
@@ -50,11 +42,6 @@
         </div>
 
         {{-- BOTONES --}}
-        {{-- 
-          - Se apilan en columna en móvil (flex-col-reverse)
-          - Se ponen en fila desde 'sm' (sm:flex-row)
-          - Se añade espacio vertical en móvil (space-y-3)
-        --}}
         <div class="pt-6 mt-6 border-t border-gray-200 flex flex-col-reverse sm:flex-row justify-end gap-3">
             <a href="{{ route('aulas.index') }}"
                class="bg-white border border-gray-300 text-gray-700 px-5 py-2 rounded-md hover:bg-gray-50 text-sm font-medium transition-colors w-full sm:w-auto text-center">

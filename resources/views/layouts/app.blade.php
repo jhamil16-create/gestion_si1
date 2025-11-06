@@ -19,7 +19,6 @@
     .custom-scrollbar::-webkit-scrollbar-thumb{ background-color:rgba(0,0,0,.2); border-radius:3px; }
     [x-cloak]{ display:none !important; }
 
-    /* Mejoras de responsividad */
     @media (max-width: 1024px) {
       aside { width: 256px !important; }
       main { padding: 1rem; }
@@ -71,37 +70,31 @@
       <!-- ================= DOCENTE ================= -->
       <div class="space-y-1">
 
-        <!-- Consulta y Operación Docente -->
-        <div class="rounded-md" :class="openMenus.consulta ? 'bg-[rgba(255,255,255,0.04)]' : ''">
+        <!-- Asignación y Planificación -->
+        <div class="rounded-md" :class="openMenus.asignacion ? 'bg-[rgba(255,255,255,0.04)]' : ''">
           <button
-            @click="toggleMenu('consulta')"
+            @click="toggleMenu('asignacion')"
             class="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-md hover:bg-[var(--blue-hover)] transition"
-            :class="openMenus.consulta ? 'shadow-inner' : ''">
+            :class="openMenus.asignacion ? 'shadow-inner' : ''">
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
-              <i class="fas fa-search w-4"></i>
+              <i class="fas fa-clipboard-list w-4"></i>
             </span>
-
-            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Consulta y Operación Docente</span>
-
-            <i class="fa-solid ml-auto transition-transform"
-               :class="{'rotate-180': openMenus.consulta, 'opacity-0': collapsed}"></i>
+            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Asignación y Planificación</span>
+            <i class="fa-solid fa-chevron-down ml-auto transition-transform"
+               :class="{'rotate-180': openMenus.asignacion, 'opacity-0': collapsed}"></i>
           </button>
 
-          <!-- subitems -->
-          <div x-show="openMenus.consulta && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="{{ route('grupos.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+          <div x-show="openMenus.asignacion && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
+            <a href="{{ route('grupos.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-tasks w-4"></i><span>Consultar carga del docente</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-clock w-4"></i><span>Consultar horario del docente</span>
-            </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-pen-to-square w-4"></i><span>Registrar dictado de clase</span>
             </a>
           </div>
         </div>
 
-        <!-- Reportes, Notificaciones y Auditoría -->
+        <!-- Reportes y Auditoría -->
         <div class="rounded-md" :class="openMenus.reportes ? 'bg-[rgba(255,255,255,0.04)]' : ''">
           <button
             @click="toggleMenu('reportes')"
@@ -110,18 +103,16 @@
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
               <i class="fas fa-chart-bar w-4"></i>
             </span>
-
-            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Reportes, Notificaciones y Auditoría</span>
-
-            <i class="fa-solid ml-auto transition-transform"
+            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Reportes y Auditoría</span>
+            <i class="fa-solid fa-chevron-down ml-auto transition-transform"
                :class="{'rotate-180': openMenus.reportes, 'opacity-0': collapsed}"></i>
           </button>
 
           <div x-show="openMenus.reportes && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-bell w-4"></i><span>Generar notificaciones</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-file-invoice w-4"></i><span>Reportes académicos</span>
             </a>
           </div>
@@ -133,7 +124,7 @@
       <!-- ================= ADMINISTRADOR ================= -->
       <div class="space-y-1">
 
-        <!-- Gestión Académica -->
+        <!-- 1. GESTIÓN ACADÉMICA -->
         <div class="rounded-md" :class="openMenus.gestion ? 'bg-[rgba(255,255,255,0.04)]' : ''">
           <button
             @click="toggleMenu('gestion')"
@@ -142,111 +133,88 @@
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
               <i class="fas fa-university w-4"></i>
             </span>
-
             <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Gestión Académica</span>
-
-            <i class="fa-solid ml-auto transition-transform"
+            <i class="fa-solid fa-chevron-down ml-auto transition-transform"
                :class="{'rotate-180': openMenus.gestion, 'opacity-0': collapsed}"></i>
           </button>
 
           <div x-show="openMenus.gestion && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="{{ route('docentes.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+              <i class="fas fa-user-shield w-4"></i><span>Gestionar usuarios y roles</span>
+            </a>
+            <a href="{{ route('docentes.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-chalkboard-teacher w-4"></i><span>Gestionar docentes</span>
             </a>
-            <a href="{{ route('materias.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('materias.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-book w-4"></i><span>Gestionar materias</span>
             </a>
-            <a href="{{ route('gestiones.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('gestiones.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-calendar-alt w-4"></i><span>Gestionar gestiones académicas</span>
             </a>
-            <a href="{{ route('aulas.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('aulas.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-door-open w-4"></i><span>Gestionar aulas</span>
             </a>
-            <a href="{{ route('grupos.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('grupos.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-users w-4"></i><span>Gestionar grupos</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-file-export w-4"></i><span>Importar/Exportar catálogos</span>
             </a>
           </div>
         </div>
 
-        <!-- Asignación y Planificación Académica -->
+        <!-- 2. ASIGNACIÓN Y PLANIFICACIÓN -->
         <div class="rounded-md" :class="openMenus.asignacion ? 'bg-[rgba(255,255,255,0.04)]' : ''">
           <button
             @click="toggleMenu('asignacion')"
-            class="flex items-center gap-3 w-full px-3 py-2 mt-1 text-sm font-medium rounded-md hover:bg-[var(--blue-hover)] transition"
+            class="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-md hover:bg-[var(--blue-hover)] transition"
             :class="openMenus.asignacion ? 'shadow-inner' : ''">
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
               <i class="fas fa-clipboard-list w-4"></i>
             </span>
-
-            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Asignación y Planificación Académica</span>
-
-            <i class="fa-solid ml-auto transition-transform"
+            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Asignación y Planificación</span>
+            <i class="fa-solid fa-chevron-down ml-auto transition-transform"
                :class="{'rotate-180': openMenus.asignacion, 'opacity-0': collapsed}"></i>
           </button>
 
           <div x-show="openMenus.asignacion && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-user-plus w-4"></i><span>Asignar materias a docente</span>
+            <a href="{{ route('docente_grupo.create') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+              <i class="fas fa-user-plus w-4"></i><span>Asignar grupo a docente</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-calendar-check w-4"></i><span>Planificar y publicar horarios</span>
             </a>
-          </div>
-        </div>
-
-        <!-- Consulta y Operación -->
-        <div class="rounded-md" :class="openMenus.consulta ? 'bg-[rgba(255,255,255,0.04)]' : ''">
-          <button
-            @click="toggleMenu('consulta')"
-            class="flex items-center gap-3 w-full px-3 py-2 mt-1 text-sm font-medium rounded-md hover:bg-[var(--blue-hover)] transition"
-            :class="openMenus.consulta ? 'shadow-inner' : ''">
-            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
-              <i class="fas fa-search w-4"></i>
-            </span>
-
-            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Consulta y Operación</span>
-
-            <i class="fa-solid ml-auto transition-transform"
-               :class="{'rotate-180': openMenus.consulta, 'opacity-0': collapsed}"></i>
-          </button>
-
-          <div x-show="openMenus.consulta && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-tasks w-4"></i><span>Consultar carga del docente</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-clock w-4"></i><span>Consultar horario del docente</span>
             </a>
           </div>
         </div>
 
-        <!-- Reportes, Notificaciones y Auditoría -->
+        <!-- 3. REPORTES Y AUDITORÍA -->
         <div class="rounded-md" :class="openMenus.reportes ? 'bg-[rgba(255,255,255,0.04)]' : ''">
           <button
             @click="toggleMenu('reportes')"
-            class="flex items-center gap-3 w-full px-3 py-2 mt-1 text-sm font-medium rounded-md hover:bg-[var(--blue-hover)] transition"
+            class="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-md hover:bg-[var(--blue-hover)] transition"
             :class="openMenus.reportes ? 'shadow-inner' : ''">
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10">
               <i class="fas fa-chart-bar w-4"></i>
             </span>
-
-            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Reportes, Notificaciones y Auditoría</span>
-
-            <i class="fa-solid ml-auto transition-transform"
+            <span :class="collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'">Reportes y Auditoría</span>
+            <i class="fa-solid fa-chevron-down ml-auto transition-transform"
                :class="{'rotate-180': openMenus.reportes, 'opacity-0': collapsed}"></i>
           </button>
 
           <div x-show="openMenus.reportes && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="{{ route('bitacoras.index') }}" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('bitacoras.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-history w-4"></i><span>Bitácora / Auditoría</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-bell w-4"></i><span>Generar notificaciones</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-file-invoice w-4"></i><span>Reportes académicos</span>
             </a>
           </div>
@@ -272,15 +240,30 @@
 
         <h1 class="text-xl font-semibold text-gray-800">@yield('title', 'Sistema FICCT')</h1>
 
+        <!-- MENÚ DE USUARIO SIMPLIFICADO -->
         <div x-data="{ open:false }" class="relative">
-          <button @click="open=!open" class="flex items-center text-sm bg-white border border-gray-200 rounded-full px-3 py-1">
-            <span class="mr-2 text-gray-700">{{ auth()->user()?->usuario->nombre ?? 'Usuario' }}</span>
-            <i class="fas fa-user-circle text-gray-500"></i>
+          <button @click="open=!open" class="flex items-center gap-2 text-sm bg-white border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-50 hover:border-gray-400 transition">
+            <span class="font-medium text-gray-700">
+              @if(auth()->user()->docente)
+                Docente
+              @else
+                Administrador
+              @endif
+            </span>
+            <i class="fas fa-user-circle text-gray-500 text-lg"></i>
           </button>
-          <div x-show="open" x-cloak @click.away="open=false" class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg py-2">
+
+          <!-- Dropdown simplificado -->
+          <div x-show="open" x-cloak @click.away="open=false" 
+               x-transition
+               class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+            
             <form method="POST" action="{{ route('logout') }}" class="w-full">
               @csrf
-              <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Cerrar sesión</button>
+              <button type="submit" class="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                <i class="fas fa-sign-out-alt w-4"></i>
+                <span class="font-medium">Cerrar sesión</span>
+              </button>
             </form>
           </div>
         </div>
@@ -288,7 +271,6 @@
     </header>
 
     <main class="p-4 bg-gray-50 min-h-screen">
-      {{-- MENSAJES FLASH CENTRALIZADOS (una sola vez aquí) --}}
       @if(session('success'))
         <div class="mb-4 p-4 flex items-center bg-green-50 border-l-4 border-green-500 rounded-lg shadow-md max-w-7xl mx-auto" 
              x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition>
@@ -315,17 +297,14 @@
       return {
         sidebarOpen: false,
         collapsed: false,
-        openMenus: {}, // guarda los submenús (se persistirá en localStorage)
+        openMenus: {},
         route: window.location.pathname,
 
         init(){
-          // restaurar colapso
           this.collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-          // restaurar openMenus, si existe
           const saved = localStorage.getItem('openMenus');
           this.openMenus = saved ? JSON.parse(saved) : {};
 
-          // cerrar sidebar al cambiar tamaño a móvil
           window.addEventListener('resize', () => {
             if (this.isMobile()) this.sidebarOpen = false;
           });
@@ -337,14 +316,12 @@
           this.collapsed = !this.collapsed;
           localStorage.setItem('sidebarCollapsed', this.collapsed);
           if(this.collapsed){
-            // al colapsar, cerrar submenus (evita que aparezcan al expandir)
             this.openMenus = {};
             localStorage.setItem('openMenus', JSON.stringify(this.openMenus));
           }
         },
 
         toggleMenu(menu){
-          // alterna el menú sin afectar a los otros (persistente)
           this.openMenus[menu] = !this.openMenus[menu];
           localStorage.setItem('openMenus', JSON.stringify(this.openMenus));
         },

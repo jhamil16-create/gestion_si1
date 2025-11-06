@@ -6,29 +6,40 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        // El orden es MUY importante para que las llaves foráneas funcionen
-        $this->call([
-            // 1. Tablas sin dependencias
-            GestionAcademicaSeeder::class,
-            AulaSeeder::class,
-            MateriaSeeder::class,
+	/**
+	 * Run the database seeds.
+	 *
+	 * Llama a los seeders en un orden lógico y comprueba si la clase existe
+	 * antes de invocarla. Esto evita que `db:seed` falle si algún seeder
+	 * todavía no está presente.
+	 */
+	public function run(): void
+	{
+		$seedersInOrder = [
+			// Datos maestros (si existen)
+			\Database\Seeders\MateriaSeeder::class,
+			\Database\Seeders\AulaSeeder::class,
+			\Database\Seeders\GestionAcademicaSeeder::class,
 
-            // 2. Tablas de Usuarios (dependen de 'usuario')
-            UsuarioAdminSeeder::class,
-            UsuarioDocenteSeeder::class,
+			// Usuarios (admins, docentes...)
+			\Database\Seeders\UsuarioSeeder::class,
 
-            // 3. Tablas que enlazan todo
-            GrupoSeeder::class,
-            AsignacionHorarioSeeder::class,
+			// Entidades que dependen de usuarios y gestiones
+			\Database\Seeders\GrupoSeeder::class,
+			\Database\Seeders\AsignacionHorarioSeeder::class,
+		];
 
-            // 4. Tablas de registros
-            AsistenciaSeeder::class,
-            BitacoraSeeder::class,
-        ]);
-    }
+		foreach ($seedersInOrder as $seederClass) {
+			if (class_exists($seederClass)) {
+				$this->call($seederClass);
+				if (isset($this->command)) {
+					$this->command->info("Seeded: {$seederClass}");
+				}
+			} else {
+				if (isset($this->command)) {
+					$this->command->info("Skipping seeder (no existe): {$seederClass}");
+				}
+			}
+		}
+	}
 }

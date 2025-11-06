@@ -11,10 +11,11 @@
         </a>
     </div>
 
-    {{-- Flashes --}}
-    @if(session('error'))
-        <div class="mb-4 p-3 bg-red-100 text-red-800 rounded">{{ session('error') }}</div>
-    @endif
+    {{-- INICIO CORRECCIÓN:
+         Se quita el bloque @if(session('error'))...@endif
+         para evitar los mensajes duplicados que viste en la imagen 'image_b2c4f9.png'.
+         Tu 'layouts.app' se debe encargar de mostrar todos los mensajes.
+    --}}
 
     <form action="{{ route('gestiones.store') }}" method="POST" class="space-y-5">
         @csrf

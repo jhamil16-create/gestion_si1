@@ -9,6 +9,7 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\GestionAcademicaController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\AsignacionHorarioController;
+use App\Http\Controllers\DocenteGrupoController; // <-- Correcto
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 
 Route::middleware(['auth'])->group(function () {
 
-    // Bitácora (solo lectura y eliminación por admins, si aplica)
+    // Bitácora
     Route::resource('bitacoras', BitacoraController::class)->only(['index', 'show', 'destroy']);
 
     // Materias
@@ -57,7 +58,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('aulas', AulaController::class);
 
     // Grupos
-    Route::resource('grupos', GrupoController::class);
+    Route::resource('grupos', GrupoController::class); // <-- AHORA SÓLO ESTÁ UNA VEZ
+
+    // --- Rutas para Asignar Docente a Grupo ---
+    Route::get('/asignar-docente-grupo', [DocenteGrupoController::class, 'create'])->name('docente_grupo.create');
+    Route::post('/asignar-docente-grupo', [DocenteGrupoController::class, 'store'])->name('docente_grupo.store');
+    Route::get('/api/grupos-por-materia', [DocenteGrupoController::class, 'getGruposPorMateria'])->name('api.grupos_por_materia');
+    // --- FIN DE RUTAS AGREGADAS ---
+
 
     // Asignaciones de Horario (anidadas bajo grupos)
     Route::prefix('grupos/{grupo}')->group(function () {

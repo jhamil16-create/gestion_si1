@@ -47,15 +47,39 @@
                    class="w-full border rounded px-3 py-2">
         </div>
 
-        <div class="mb-6">
-            <label class="block mb-1 font-semibold">Nueva Contraseña <span class="text-gray-500 text-sm">(dejar en blanco para no cambiar)</span></label>
-            <input type="password" 
-                   name="password" 
-                   minlength="8" 
-                   class="w-full border rounded px-3 py-2"
-                   placeholder="Mínimo 8 caracteres">
-            <p class="text-gray-500 text-sm mt-1">Solo completa este campo si deseas cambiar la contraseña</p>
+        <!-- INICIO DE CORRECCIÓN: Sección de Contraseña Actualizada -->
+        <div class="mb-6 border-t border-gray-200 pt-6 mt-6">
+            <p class="font-semibold text-lg mb-2">Cambiar Contraseña</p>
+            <p class="text-gray-500 text-sm mb-4">
+                Solo completa estos campos si deseas cambiar la contraseña. Déjalos en blanco para no cambiarla.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-1 font-semibold text-sm">Nueva Contraseña</label>
+                    <input type="password" 
+                           name="password" 
+                           minlength="8" 
+                           class="w-full border rounded px-3 py-2 @error('password') border-red-500 @enderror"
+                           placeholder="Mínimo 8 caracteres">
+                    
+                    {{-- Este error se activará si la confirmación falla --}}
+                    @error('password')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block mb-1 font-semibold text-sm">Confirmar Nueva Contraseña</label>
+                    <input type="password" 
+                           name="password_confirmation" {{-- ¡Este es el campo que faltaba! --}}
+                           minlength="8" 
+                           class="w-full border rounded px-3 py-2"
+                           placeholder="Repite la contraseña">
+                </div>
+            </div>
         </div>
+        <!-- FIN DE CORRECCIÓN -->
 
         <div class="flex justify-end space-x-3">
             <a href="{{ route('docentes.index') }}" class="px-4 py-2 border rounded hover:bg-gray-100">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Docente;
 
 class Grupo extends Model
 {
@@ -35,9 +36,11 @@ class Grupo extends Model
     ];
 
     /**
-     * CORRECCIÓN 3 y 4:
-     * Renombramos 'docente' a 'docentes' (plural).
-     * Un grupo ahora tiene MUCHOS docentes.
+     * Relación: un grupo puede tener muchos docentes (belongsToMany).
+     *
+     * Nota: el nombre del método es plural `docentes` para reflejar que
+     * devuelve una colección. Esto mantiene consistencia con el uso en
+     * las vistas: `$grupo->docentes`.
      */
     public function docentes()
     {

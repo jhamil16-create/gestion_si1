@@ -49,7 +49,6 @@
                         <tr class="bg-gray-100 text-left">
                             <th class="border px-4 py-2">Nombre Grupo</th>
                             <th class="border px-4 py-2">Docentes</th>
-                            <th class="border px-4 py-2">Capacidad</th>
                             <th class="border px-4 py-2">Gestión</th>
                             <th class="border px-4 py-2 text-center">Acciones</th>
                         </tr>
@@ -59,10 +58,15 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="border px-4 py-2">{{ $grupo->nombre ?? '—' }}</td>
                                 <td class="border px-4 py-2">
-                                    {{-- Lógica N-N corregida --}}
-                                    {{ $grupo->docentes->pluck('usuario.nombre')->join(', ') ?? 'N/A' }}
+                                    {{-- Lógica N-N corregida: mostrar los nombres de los docentes --}}
+                                    @if($grupo->docentes && $grupo->docentes->count() > 0)
+                                        @foreach($grupo->docentes as $docente)
+                                            {{ $docente->usuario->nombre }}@if(! $loop->last), @endif
+                                        @endforeach
+                                    @else
+                                        N/A
+                                    @endif
                                 </td>
-                                <td class="border px-4 py-2">{{ $grupo->capacidad ?? 0 }} estudiantes</td>
                                 <td class="border px-4 py-2">
                                     {{ optional($grupo->gestionAcademica)->nombre ?? 'N/A' }}
                                 </td>
@@ -91,8 +95,14 @@
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-semibold text-gray-500">Docentes</span>
                         <span class="text-sm text-gray-700 text-right">
-                            {{-- Lógica N-N corregida --}}
-                            {{ $grupo->docentes->pluck('usuario.nombre')->join(', ') ?? 'N/A' }}
+                            {{-- Lógica N-N corregida: mostrar los nombres de los docentes --}}
+                            @if($grupo->docentes && $grupo->docentes->count() > 0)
+                                @foreach($grupo->docentes as $docente)
+                                    {{ $docente->usuario->nombre }}@if(! $loop->last), @endif
+                                @endforeach
+                            @else
+                                N/A
+                            @endif
                         </span>
                     </div>
                     

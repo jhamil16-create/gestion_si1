@@ -19,7 +19,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb{ background-color:rgba(0,0,0,.2); border-radius:3px; }
     [x-cloak]{ display:none !important; }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1024px) {  
       aside { width: 256px !important; }
       main { padding: 1rem; }
     }
@@ -85,12 +85,15 @@
           </button>
 
           <div x-show="openMenus.asignacion && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="{{ route('grupos.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-tasks w-4"></i><span>Consultar carga del docente</span>
+            <a href="{{ route('docente.miCarga') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+              <i class="fas fa-tasks w-4"></i><span>Consultar mi carga</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-clock w-4"></i><span>Consultar horario del docente</span>
-            </a>
+          <a href="{{ route('horario.docente') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <i class="fas fa-clock w-4"></i><span>Consultar horario del docente</span>
+          </a>
+          <a href="{{ route('docente.mi-horario') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <i class="fas fa-clock w-4"></i><span>Mi Horario</span>
+          </a>
           </div>
         </div>
 
@@ -109,10 +112,10 @@
           </button>
 
           <div x-show="openMenus.reportes && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('notificaciones.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-bell w-4"></i><span>Generar notificaciones</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('reportes.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-file-invoice w-4"></i><span>Reportes académicos</span>
             </a>
           </div>
@@ -139,7 +142,7 @@
           </button>
 
           <div x-show="openMenus.gestion && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('usuarios.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-user-shield w-4"></i><span>Gestionar usuarios y roles</span>
             </a>
             <a href="{{ route('docentes.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
@@ -157,7 +160,7 @@
             <a href="{{ route('grupos.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-users w-4"></i><span>Gestionar grupos</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('catalogos.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-file-export w-4"></i><span>Importar/Exportar catálogos</span>
             </a>
           </div>
@@ -181,14 +184,17 @@
             <a href="{{ route('docente_grupo.create') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-user-plus w-4"></i><span>Asignar grupo a docente</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('horarios.planificar.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-calendar-check w-4"></i><span>Planificar y publicar horarios</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-tasks w-4"></i><span>Consultar carga del docente</span>
+            <a href="{{ route('docentes.lista-para-admin') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]"> 
+              <i class="fas fa-tasks w-4"></i><span>Ver cargas de docentes</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-clock w-4"></i><span>Consultar horario del docente</span>
+            <a href="{{ route('horarios.docentes') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+              <i class="fas fa-clock w-4"></i><span>Consultar horarios de docentes</span>
+            </a>
+            <a href="{{ route('asistencias.registrar') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+              <i class="fas fa-user-check w-4"></i><span>Registrar asistencia</span>
             </a>
           </div>
         </div>
@@ -211,10 +217,10 @@
             <a href="{{ route('bitacoras.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-history w-4"></i><span>Bitácora / Auditoría</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('notificaciones.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-bell w-4"></i><span>Generar notificaciones</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <a href="{{ route('reportes.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-file-invoice w-4"></i><span>Reportes académicos</span>
             </a>
           </div>
@@ -291,58 +297,81 @@
     </main>
   </div>
 
+  @stack('scripts')
+
   <!-- ALPINE STORE -->
   <script>
     function layoutApp(){
       return {
         sidebarOpen: false,
-        collapsed: false,
-        openMenus: {},
+        collapsed: localStorage.getItem('sidebarCollapsed') === 'true',
+        openMenus: JSON.parse(localStorage.getItem('openMenus') || '{}'),
         route: window.location.pathname,
 
-        init(){
-          this.collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-          const saved = localStorage.getItem('openMenus');
-          this.openMenus = saved ? JSON.parse(saved) : {};
-
-          window.addEventListener('resize', () => {
-            if (this.isMobile()) this.sidebarOpen = false;
-          });
+        init() {
+          // Abrir el menú correspondiente según la ruta actual
+          this.initActiveMenu();
         },
 
-        isMobile(){ return window.innerWidth < 1024; },
-
-        toggleCollapse(){
-          this.collapsed = !this.collapsed;
-          localStorage.setItem('sidebarCollapsed', this.collapsed);
-          if(this.collapsed){
-            this.openMenus = {};
-            localStorage.setItem('openMenus', JSON.stringify(this.openMenus));
+        initActiveMenu() {
+          const path = this.route;
+          
+          // Gestión Académica
+          if (path.includes('/gestiones') || path.includes('/docentes') || 
+              path.includes('/materias') || path.includes('/aulas') || 
+              path.includes('/grupos') || path.includes('/catalogos')) {
+            this.openMenus.gestion = true;
+          }
+          
+          // Asignación y Planificación
+          if (path.includes('/docente_grupo') || path.includes('/horarios') || 
+              path.includes('/docente/mi-carga') || path.includes('/asistencia')) {
+            this.openMenus.asignacion = true;
+          }
+          
+          // Reportes y Auditoría
+          if (path.includes('/bitacoras') || path.includes('/reportes') || 
+              path.includes('/notificaciones')) {
+            this.openMenus.reportes = true;
           }
         },
 
-        toggleMenu(menu){
+        toggleMenu(menu) {
           this.openMenus[menu] = !this.openMenus[menu];
           localStorage.setItem('openMenus', JSON.stringify(this.openMenus));
         },
 
-        get sidebarWidth(){
-          if (this.isMobile()) return this.sidebarOpen ? 256 : 0;
-          return this.collapsed ? 80 : 256;
+        toggleCollapse() {
+          this.collapsed = !this.collapsed;
+          localStorage.setItem('sidebarCollapsed', this.collapsed);
+          
+          // Cerrar todos los menús al colapsar
+          if (this.collapsed) {
+            this.openMenus = {};
+            localStorage.setItem('openMenus', '{}');
+          } else {
+            // Reabrir el menú activo
+            this.initActiveMenu();
+          }
         },
 
-        get sidebarStyle(){
-          const w = this.sidebarWidth;
-          const trans = this.isMobile()
-            ? `translateX(${this.sidebarOpen ? '0' : '-100%'})`
-            : 'translateX(0)';
-          return `width:${w}px; transform:${trans};`;
+        isMobile() {
+          return window.innerWidth < 1024;
         },
 
-        get contentStyle(){
-          const ml = this.isMobile() ? 0 : this.sidebarWidth;
-          return `margin-left:${ml}px; transition: margin-left 0.3s ease;`;
+        get sidebarStyle() {
+          if (this.isMobile()) {
+            return this.sidebarOpen ? 'transform: translateX(0);' : 'transform: translateX(-100%);';
+          }
+          return this.collapsed ? 'width: 80px;' : 'width: 256px;';
         },
+
+        get contentStyle() {
+          if (this.isMobile()) {
+            return 'margin-left: 0;';
+          }
+          return this.collapsed ? 'margin-left: 80px;' : 'margin-left: 256px;';
+        }
       }
     }
   </script>

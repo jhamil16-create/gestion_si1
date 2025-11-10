@@ -33,7 +33,11 @@ class AsignacionHorarioController extends Controller
         // Obtener datos para la descripción
         $aulaTipo = $asignacion->aula->tipo ?? 'Aula ID ' . $asignacion->id_aula;
         $materiaNombre = $grupo->materia->nombre ?? $grupo->sigla;
-        $docenteNombre = $grupo->docente->usuario->nombre ?? 'Docente ID ' . $grupo->id_docente;
+        // Un grupo puede tener varios docentes; reunimos sus nombres (si existen)
+        $docenteNombre = $grupo->docentes->pluck('usuario.nombre')->filter()->join(', ');
+        if (empty($docenteNombre)) {
+            $docenteNombre = 'Docente ID ' . ($grupo->id_docente ?? 'N/A');
+        }
 
         Bitacora::create([
             'id_usuario' => auth()->id(),

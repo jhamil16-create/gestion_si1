@@ -22,6 +22,22 @@ class DocenteController extends Controller
     {
         return view('docentes.create');
     }
+    public function listaParaAdmin()
+    {
+        try {
+            $docentes = Docente::with('usuario')->get();
+            
+            // Cambia por una vista que sí tengas:
+            return view('docentes.index', compact('docentes'));
+            // O:
+            return view('admin.docentes.index', compact('docentes'));
+            // O incluso:
+            return view('admin.planificar-horarios', compact('docentes'));
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al cargar la lista: ' . $e->getMessage());
+        }
+    }
 
     public function store(Request $request)
     {

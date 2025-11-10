@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Asistencia;
 use App\Models\AsignacionHorario;
 use Illuminate\Http\Request;
+use App\Models\Docente; // ← AGREGA ESTA LÍNEA
+use App\Models\Grupo; // ← Y ESTA TAMBIÉN
 
 class AsistenciaController extends Controller
 {
@@ -50,6 +52,15 @@ class AsistenciaController extends Controller
         ]);
 
         return back()->with('success', 'Asistencia registrada.');
+    }
+
+    public function create()
+    {
+        // Datos básicos para el formulario de asistencia
+        return view('asistencias.registrar', [
+            'docentes' => Docente::with('usuario')->get(),
+            'grupos' => \App\Models\Grupo::all(),
+        ]);
     }
 
     /**

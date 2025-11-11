@@ -18,125 +18,149 @@
         @endif
     </div>
 
-    {{-- Filtros --}}
+    {{-- Mostrar errores de validación --}}
+    @if ($errors->any())
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                        <strong>Por favor corrige los siguientes errores:</strong>
+                    </p>
+                    <ul class="mt-1 text-sm text-red-600 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Formulario de registro --}}
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <form action="{{ route('asistencias.index') }}" method="GET" class="flex flex-wrap gap-4">
-            <div class="flex-1 min-w-[200px]">
-                <label for="fecha" class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
-                <input type="date" 
-                       name="fecha" 
-                       id="fecha" 
-                       value="{{ request('fecha') }}"
-                       class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Registro de Asistencia Docente</h2>
+        
+        <form action="{{ route('asistencias.store') }}" method="POST">
+            @csrf
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Docente --}}
+                <div>
+                    <label for="id_docente" class="block text-sm font-medium text-gray-700 mb-2">
+                        Docente *
+                    </label>
+                    <select name="id_docente" 
+                            id="id_docente"
+                            required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <option value="">Seleccione un docente</option>
+                        @foreach($docentes as $docente)
+                            <option value="{{ $docente->id_docente }}" 
+                                    {{ old('id_docente') == $docente->id_docente ? 'selected' : '' }}>
+                                {{ $docente->usuario->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('id_docente')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Fecha --}}
+                <div>
+                    <label for="fecha" class="block text-sm font-medium text-gray-700 mb-2">
+                        Fecha *
+                    </label>
+                    <input type="date" 
+                           name="fecha" 
+                           id="fecha" 
+                           value="{{ old('fecha', now()->format('Y-m-d')) }}"
+                           required
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    @error('fecha')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Hora de Entrada --}}
+                <div>
+                    <label for="hora_entrada" class="block text-sm font-medium text-gray-700 mb-2">
+                        Hora de Entrada
+                    </label>
+                    <input type="time" 
+                           name="hora_entrada" 
+                           id="hora_entrada" 
+                           value="{{ old('hora_entrada') }}"
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    @error('hora_entrada')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Hora de Salida --}}
+                <div>
+                    <label for="hora_salida" class="block text-sm font-medium text-gray-700 mb-2">
+                        Hora de Salida
+                    </label>
+                    <input type="time" 
+                           name="hora_salida" 
+                           id="hora_salida" 
+                           value="{{ old('hora_salida') }}"
+                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    @error('hora_salida')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Estado - CORREGIDO para usar 1 carácter --}}
+                <div class="md:col-span-2">
+                    <label for="estado" class="block text-sm font-medium text-gray-700 mb-2">
+                        Estado *
+                    </label>
+                    <select name="estado" 
+                            id="estado"
+                            required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <option value="">Seleccione un estado</option>
+                        <option value="P" {{ old('estado') == 'P' ? 'selected' : '' }}>Presente</option>
+                        <option value="A" {{ old('estado') == 'A' ? 'selected' : '' }}>Ausente</option>
+                        <option value="T" {{ old('estado') == 'T' ? 'selected' : '' }}>Tardanza</option>
+                        <option value="L" {{ old('estado') == 'L' ? 'selected' : '' }}>Licencia</option>
+                    </select>
+                    @error('estado')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-xs text-gray-500">
+                        P = Presente, A = Ausente, T = Tardanza, L = Licencia
+                    </p>
+                </div>
             </div>
 
-            <div class="flex-1 min-w-[200px]">
-                <label for="estado" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                <select name="estado" 
-                        id="estado"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <option value="">Todos</option>
-                    <option value="presente" {{ request('estado') === 'presente' ? 'selected' : '' }}>Presente</option>
-                    <option value="ausente" {{ request('estado') === 'ausente' ? 'selected' : '' }}>Ausente</option>
-                    <option value="tardanza" {{ request('estado') === 'tardanza' ? 'selected' : '' }}>Tardanza</option>
-                </select>
-            </div>
-
-            <div class="flex items-end">
+            {{-- Botones --}}
+            <div class="mt-6 flex justify-end space-x-3">
+                <a href="{{ route('asistencias.index') }}" 
+                   class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors">
+                    Cancelar
+                </a>
                 <button type="submit" 
-                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors">
-                    Filtrar
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Registrar Asistencia
                 </button>
             </div>
         </form>
     </div>
-
-    {{-- Tabla de Asistencias --}}
-    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full">
-                <thead>
-                    <tr class="bg-gray-50">
-                        <th class="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Fecha
-                        </th>
-                        <th class="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Docente
-                        </th>
-                        <th class="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Hora Entrada
-                        </th>
-                        <th class="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Hora Salida
-                        </th>
-                        <th class="px-6 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Estado
-                        </th>
-                        @if(Auth::user()->isAdmin())
-                            <th class="px-6 py-3 border-b text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Acciones
-                            </th>
-                        @endif
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($asistencias as $asistencia)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $asistencia->fecha->format('d/m/Y') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $asistencia->docente->usuario->nombre }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $asistencia->hora_entrada }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $asistencia->hora_salida }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $asistencia->estado === 'presente' ? 'bg-green-100 text-green-800' : '' }}
-                                    {{ $asistencia->estado === 'ausente' ? 'bg-red-100 text-red-800' : '' }}
-                                    {{ $asistencia->estado === 'tardanza' ? 'bg-yellow-100 text-yellow-800' : '' }}">
-                                    {{ ucfirst($asistencia->estado) }}
-                                </span>
-                            </td>
-                            @if(Auth::user()->isAdmin())
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('asistencias.edit', $asistencia) }}" 
-                                       class="text-blue-600 hover:text-blue-900">
-                                        Editar
-                                    </a>
-                                    <form action="{{ route('asistencias.destroy', $asistencia) }}" 
-                                          method="POST" 
-                                          class="inline ml-3">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="text-red-600 hover:text-red-900"
-                                                onclick="return confirm('¿Estás seguro de eliminar esta asistencia?')">
-                                            Eliminar
-                                        </button>
-                                    </form>
-                                </td>
-                            @endif
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="{{ Auth::user()->isAdmin() ? '6' : '5' }}" class="px-6 py-4 text-center text-gray-500">
-                                No hay registros de asistencia que mostrar
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        {{-- Paginación --}}
-        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            {{ $asistencias->links() }}
-        </div>
-    </div>
 </div>
+
+<script>
+    // Establecer fecha actual por defecto
+    document.addEventListener('DOMContentLoaded', function() {
+        const fechaInput = document.getElementById('fecha');
+        if (!fechaInput.value) {
+            fechaInput.value = new Date().toISOString().split('T')[0];
+        }
+    });
+</script>
 @endsection

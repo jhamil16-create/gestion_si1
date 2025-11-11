@@ -5,71 +5,110 @@ namespace App\Http\Controllers;
 use App\Models\Asistencia;
 use App\Models\AsignacionHorario;
 use Illuminate\Http\Request;
-use App\Models\Docente; // ← AGREGA ESTA LÍNEA
-use App\Models\Grupo; // ← Y ESTA TAMBIÉN
+use App\Models\Docente;
+use App\Models\Grupo;
 
 class AsistenciaController extends Controller
 {
     /**
-     * Muestra la asistencia para una asignación de horario específica.
-     * Ruta: /asignaciones/{asignacione}/asistencias
+     * Muestra el listado general de asistencias con sus relaciones
      */
-    public function index(AsignacionHorario $asignacione)
+    public function index()
     {
-        // Cargamos el grupo, materia, docente para mostrar info en la vista
-        $asignacione->load('grupo.materia', 'grupo.docente.usuario', 'aula');
-        
-        $asistencias = $asignacione->asistencias()->orderBy('fecha', 'desc')->get();
-        
-        return view('asistencias.index', compact('asignacione', 'asistencias'));
+        $asistencias = Asistencia::with(['asignacionHorario.grupo.materia', 'asignacionHorario.grupo.docentes'])
+            ->orderBy('fecha', 'desc')
+            ->paginate(15);
+
+        return view('asistencias.index', compact('asistencias'));
     }
 
     /**
-     * Guarda un nuevo registro de asistencia.
-     * Ruta: POST /asignaciones/{asignacione}/asistencias
+     * Muestra el formulario para registrar asistencia
      */
-    public function store(Request $request, AsignacionHorario $asignacione)
+    public function create()
+    {
+        return view('asistencias.create', [
+            'asignaciones' => AsignacionHorario::with(['grupo.materia', 'grupo.docentes'])->get(),
+        ]);
+    }
+
+    /**
+     * Guarda un nuevo registro de asistencia
+     */
+    public function store(Request $request)
     {
         $request->validate([
+            'id_asignacion' => 'required|exists:asignacion_horario,id_asignacion',
             'fecha' => 'required|date',
-            'estado' => 'required|string|max:1', // P, F, L
+            'estado' => 'required|in:P,F,L', // Presente, Falta, Licencia
             'observaciones' => 'nullable|string|max:255',
         ]);
 
-        // Verificamos si ya existe asistencia para esa fecha
-        $existe = $asignacione->asistencias()
-                             ->where('fecha', $request->fecha)
-                             ->exists();
-        
-        if ($existe) {
-            return back()->with('error', 'Ya existe un registro de asistencia para esta fecha.');
+        try {
+            Asistencia::create([
+                'id_asignacion' => $request->id_asignacion,
+                'fecha' => $request->fecha,
+                'estado' => $request->estado,
+                'observaciones' => $request->observaciones,
+            ]);
+
+            return redirect()->route('asistencias.index')
+                           ->with('success', '✓ Asistencia registrada correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al registrar la asistencia: ' . $e->getMessage());
         }
-
-        $asignacione->asistencias()->create([
-            'fecha' => $request->fecha,
-            'estado' => $request->estado,
-            'observaciones' => $request->observaciones,
-        ]);
-
-        return back()->with('success', 'Asistencia registrada.');
     }
 
-    public function create()
+    /**
+     * Muestra el formulario para editar asistencia
+     */
+    public function edit(Asistencia $asistencia)
     {
-        // Datos básicos para el formulario de asistencia
-        return view('asistencias.registrar', [
-            'docentes' => Docente::with('usuario')->get(),
-            'grupos' => \App\Models\Grupo::all(),
+        $asistencia->load('asignacionHorario.grupo.materia');
+        
+        return view('asistencias.edit', [
+            'asistencia' => $asistencia,
+            'asignaciones' => AsignacionHorario::with(['grupo.materia', 'grupo.docentes'])->get(),
         ]);
     }
 
     /**
-     * Elimina un registro de asistencia.
-     * Ruta: DELETE /asistencias/{asistencia}
+     * Actualiza un registro de asistencia existente
+     */
+    public function update(Request $request, Asistencia $asistencia)
+    {
+        $request->validate([
+            'id_asignacion' => 'required|exists:asignacion_horario,id_asignacion',
+            'fecha' => 'required|date',
+            'estado' => 'required|in:P,F,L', // Presente, Falta, Licencia
+            'observaciones' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            $asistencia->update([
+                'id_asignacion' => $request->id_asignacion,
+                'fecha' => $request->fecha,
+                'estado' => $request->estado,
+                'observaciones' => $request->observaciones,
+            ]);
+
+            return redirect()->route('asistencias.index')
+                           ->with('success', '✓ Asistencia actualizada correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al actualizar la asistencia: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Elimina un registro de asistencia
      */
     public function destroy(Asistencia $asistencia)
     {
-        $asistencia->delete();
-        return back()->with('success', 'Registro de asistencia eliminado.');
+        try {
+            $asistencia->delete();
+            return back()->with('success', '✓ Asistencia eliminada correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al eliminar la asistencia: ' . $e->getMessage());
+        }
     }
 }

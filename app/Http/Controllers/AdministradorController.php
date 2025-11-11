@@ -61,16 +61,23 @@ class AdministradorController extends Controller
             return back()->with('error', 'Error al crear: ' . $e->getMessage())->withInput();
         }
     }
-
-    public function show(Administrador $administrador)
+    public function show($id)
     {
-        $administrador->load('usuario');
-        return view('administradores.show', compact('administrador'));
+        $administrador = Administrador::with(['usuario', 'usuario.bitacoras'])->find($id);
+        
+        if (!$administrador) {
+            abort(404, 'Administrador no encontrado');
+        }
+        
+        return view('administradores.show', [
+            'administrador' => $administrador,
+            'usuario' => $administrador->usuario
+        ]);
     }
-
+    
     public function edit(Administrador $administrador)
     {
-        $administrador->load('usuario');
+        $administrador->load('usuario'); // Esto carga la relación usuario
         return view('administradores.edit', compact('administrador'));
     }
     

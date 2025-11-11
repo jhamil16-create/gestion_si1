@@ -88,11 +88,11 @@
             <a href="{{ route('docente.miCarga') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-tasks w-4"></i><span>Consultar mi carga</span>
             </a>
-          <a href="{{ route('horario.docente') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-            <i class="fas fa-clock w-4"></i><span>Consultar horario del docente</span>
-          </a>
           <a href="{{ route('docente.mi-horario') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
             <i class="fas fa-clock w-4"></i><span>Mi Horario</span>
+          </a>
+          <a href="{{ route('asistencias.create') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+            <i class="fas fa-user-check w-4"></i><span>Registrar asistencia</span>
           </a>
           </div>
         </div>
@@ -142,8 +142,8 @@
           </button>
 
           <div x-show="openMenus.gestion && !collapsed" x-transition class="pl-12 pr-3 pb-2 pt-1 space-y-1">
-            <a href="{{ route('usuarios.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-user-shield w-4"></i><span>Gestionar usuarios y roles</span>
+            <a href="{{ route('administradores.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
+              <i class="fas fa-user-shield w-4"></i><span>Gestionar Administradores</span>
             </a>
             <a href="{{ route('docentes.index') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-chalkboard-teacher w-4"></i><span>Gestionar docentes</span>
@@ -192,9 +192,6 @@
             </a>
             <a href="{{ route('horarios.docentes') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
               <i class="fas fa-clock w-4"></i><span>Consultar horarios de docentes</span>
-            </a>
-            <a href="{{ route('asistencias.registrar') }}" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded hover:bg-[var(--blue-hover)]">
-              <i class="fas fa-user-check w-4"></i><span>Registrar asistencia</span>
             </a>
           </div>
         </div>

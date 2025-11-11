@@ -54,7 +54,7 @@
                                          - Se usa un botón normal con 'data-attributes'.
                                     --}}
                                     <button type="button" 
-                                            class="open-delete-modal inline-flex items-center justify-center gap-1 px-3 py-1 text-xs rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors w-full" 
+                                            class="open-delete-modal inline-flex items-center justify-center gap-1 px-3 py-1 text-xs rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors sm:w-auto" 
                                             title="Eliminar"
                                             data-action="{{ route('gestiones.destroy', $gestion) }}"
                                             data-name="{{ $gestion->nombre }}">

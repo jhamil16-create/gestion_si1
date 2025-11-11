@@ -34,4 +34,34 @@ class Asistencia extends Model
     {
         return $this->belongsTo(AsignacionHorario::class, 'id_asignacion', 'id_asignacion');
     }
+
+    /**
+     * Convierte el código de estado a texto legible
+     * La migración define: 'P' (Presente), 'F' (Falta), 'L' (Licencia)
+     */
+    public function getEstadoTextAttribute()
+    {
+        $estados = [
+            'P' => 'Presente',
+            'F' => 'Falta',
+            'L' => 'Licencia',
+        ];
+        
+        return $estados[$this->estado] ?? 'Desconocido';
+    }
+
+    /**
+     * Devuelve el color del estado para mostrar en badge
+     */
+    public function getEstadoColorAttribute()
+    {
+        $colores = [
+            'P' => 'bg-green-100 text-green-800',
+            'F' => 'bg-red-100 text-red-800',
+            'L' => 'bg-blue-100 text-blue-800',
+        ];
+        
+        return $colores[$this->estado] ?? 'bg-gray-100 text-gray-800';
+    }
+
 }

@@ -163,13 +163,13 @@ Route::middleware(['auth'])->group(function () {
     ->middleware('auth');
 
     // Asistencias - Rutas específicas
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/asistencias/registrar', [AsistenciaController::class, 'create'])
-            ->name('asistencias.registrar');
-        Route::post('/asistencias', [AsistenciaController::class, 'store'])
-            ->name('asistencias.store');
-        Route::get('/asistencias', [AsistenciaController::class, 'index'])
-            ->name('asistencias.index');
+    Route::prefix('asistencias')->group(function () {
+        Route::get('/', [AsistenciaController::class, 'index'])->name('asistencias.index');
+        Route::get('/registrar', [AsistenciaController::class, 'create'])->name('asistencias.create');
+        Route::post('/', [AsistenciaController::class, 'store'])->name('asistencias.store');
+        Route::get('/{asistencia}/edit', [AsistenciaController::class, 'edit'])->name('asistencias.edit');
+        Route::put('/{asistencia}', [AsistenciaController::class, 'update'])->name('asistencias.update');
+        Route::delete('/{asistencia}', [AsistenciaController::class, 'destroy'])->name('asistencias.destroy');
     });
 
     // Notificaciones

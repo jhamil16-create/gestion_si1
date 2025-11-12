@@ -18,6 +18,8 @@ class Asistencia extends Model
         'estado',
         'observaciones',
         'id_asignacion',
+        'hora_entrada',    // ← AGREGAR ESTO
+        'hora_salida',     // ← AGREGAR ESTO
     ];
 
     /**
@@ -37,13 +39,13 @@ class Asistencia extends Model
 
     /**
      * Convierte el código de estado a texto legible
-     * La migración define: 'P' (Presente), 'F' (Falta), 'L' (Licencia)
      */
     public function getEstadoTextAttribute()
     {
         $estados = [
             'P' => 'Presente',
-            'F' => 'Falta',
+            'A' => 'Ausente',      // Cambiado de 'F' a 'A'
+            'T' => 'Tardanza',     // AGREGADO
             'L' => 'Licencia',
         ];
         
@@ -57,11 +59,11 @@ class Asistencia extends Model
     {
         $colores = [
             'P' => 'bg-green-100 text-green-800',
-            'F' => 'bg-red-100 text-red-800',
+            'A' => 'bg-red-100 text-red-800',      // Cambiado de 'F' a 'A'
+            'T' => 'bg-yellow-100 text-yellow-800', // AGREGADO
             'L' => 'bg-blue-100 text-blue-800',
         ];
         
         return $colores[$this->estado] ?? 'bg-gray-100 text-gray-800';
     }
-
 }

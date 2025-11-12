@@ -7,29 +7,68 @@ use App\Models\AsignacionHorario;
 use Illuminate\Http\Request;
 use App\Models\Docente;
 use App\Models\Grupo;
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB; // ← Agregar este import si usas DB::
 
 class AsistenciaController extends Controller
 {
     /**
      * Muestra el listado general de asistencias con sus relaciones
      */
-    public function index()
-    {
-        $asistencias = Asistencia::with(['asignacionHorario.grupo.materia', 'asignacionHorario.grupo.docentes'])
-            ->orderBy('fecha', 'desc')
-            ->paginate(15);
-
-        return view('asistencias.index', compact('asistencias'));
+public function index()
+{
+    // Solo administradores necesitan la lista de docentes para filtrar
+    if (Auth::user()->isAdmin()) {
+        $docentes = Docente::with('usuario')->get();
+    } else {
+        $docentes = collect(); // Colección vacía para docentes normales
     }
+
+    // Obtener las asistencias
+    $asistencias = Asistencia::orderBy('fecha', 'desc')
+        ->paginate(15);
+
+    return view('asistencias.index', compact('asistencias', 'docentes'));
+}
 
     /**
      * Muestra el formulario para registrar asistencia
      */
     public function create()
     {
-        return view('asistencias.create', [
-            'asignaciones' => AsignacionHorario::with(['grupo.materia', 'grupo.docentes'])->get(),
-        ]);
+        try {
+            // Obtener el ID del docente logueado
+            $docenteId = Auth::user()->docente->id_docente;
+            
+            // Verificar que el docente existe
+            if (!$docenteId) {
+                return redirect()->route('asistencias.index')
+                            ->with('error', 'No se encontró el perfil de docente.');
+            }
+
+            // Obtener los IDs de grupos del docente
+            $gruposIds = \DB::table('docente_grupo')
+                ->where('id_docente', $docenteId)
+                ->pluck('id_grupo')
+                ->toArray();
+
+            // Si no tiene grupos asignados
+            if (empty($gruposIds)) {
+                return redirect()->route('asistencias.index')
+                            ->with('info', 'No tienes grupos asignados para registrar asistencia.');
+            }
+
+            // Obtener las asignaciones de esos grupos
+            $asignaciones = AsignacionHorario::whereIn('id_grupo', $gruposIds)
+                ->with(['grupo.materia', 'aula'])
+                ->get();
+
+            return view('asistencias.create', compact('asignaciones'));
+
+        } catch (\Exception $e) {
+            return redirect()->route('asistencias.index')
+                        ->with('error', 'Error al cargar el formulario: ' . $e->getMessage());
+        }
     }
 
     /**
